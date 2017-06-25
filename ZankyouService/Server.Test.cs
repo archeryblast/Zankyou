@@ -47,14 +47,57 @@ namespace ZankyouService
         }
 
         [Test()]
+        public void TestProcessReceive()
+        {
+            Socket client = new Socket(SocketType.Stream, ProtocolType.IP);
+            client.Connect("127.0.0.1", 12345);
+            client.Send(Encoding.ASCII.GetBytes("GetProcessInfo"));
+
+            byte[] buffer = new byte[10];
+            client.Receive(buffer);
+
+            buffer = new byte[BitConverter.ToInt16(buffer, 0)];
+            client.Receive(buffer);
+
+            string message = Encoding.ASCII.GetString(buffer);
+            Newtonsoft.Json.JsonConvert.DeserializeObject<List<SysProcess>>(message);
+            client.Close();
+        }
+
+        [Test()]
+        public void TestSysInfoReceive()
+        {
+            Socket client = new Socket(SocketType.Stream, ProtocolType.IP);
+            client.Connect("127.0.0.1", 12345);
+            client.Send(Encoding.ASCII.GetBytes("GetSystemInfo"));
+
+            byte[] buffer = new byte[10];
+            client.Receive(buffer);
+
+            buffer = new byte[BitConverter.ToInt16(buffer, 0)];
+            client.Receive(buffer);
+
+            string message = Encoding.ASCII.GetString(buffer);
+            Console.WriteLine(message);
+            client.Close();
+        }
+
+        [Test()]
         public void TestMuliClientMessages()
         {
             for (int i = 0; i < 10; i++)
             {
-                Socket client = new Socket(SocketType.Stream, ProtocolType.IP);
-                client.Connect("127.0.0.1", 12345);
-                client.Send(Encoding.ASCII.GetBytes("hello world"));
+                Thread t = new Thread(() =>
+                {
+                    Socket client = new Socket(SocketType.Stream, ProtocolType.IP);
+                    client.Connect("127.0.0.1", 12345);
+                    client.Send(Encoding.ASCII.GetBytes("hello world"));
+                    client.Close();
+                });
+                t.Start();
             }
+
+
         }
     }
 }

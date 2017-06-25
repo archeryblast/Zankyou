@@ -68,6 +68,32 @@ namespace ZankyouService
                             {
                                 string message = Encoding.ASCII.GetString(buffer, 0, bytesReceived);
                                 Console.WriteLine(message);
+                                switch (message)
+                                {
+                                    case "GetSystemInfo":
+                                        {
+                                            string result = Newtonsoft.Json.JsonConvert.SerializeObject(Monitor.GetSystemUsage());
+                                            byte[] clientMessage = Encoding.ASCII.GetBytes(result);
+                                            // notifies the client how large the data will be
+                                            clientSocket.Send(BitConverter.GetBytes(clientMessage.Length));
+                                            // sends data to client
+                                            clientSocket.Send(clientMessage);
+                                            break;
+                                        }
+                                    case "GetProcessInfo":
+                                        {
+                                            string result = Newtonsoft.Json.JsonConvert.SerializeObject(Monitor.GetSystemProcesses());
+                                            byte[] clientMessage = Encoding.ASCII.GetBytes(result);
+                                            // notifies the client how large the data will be
+                                            clientSocket.Send(BitConverter.GetBytes(clientMessage.Length));
+                                            // sends data to client
+                                            clientSocket.Send(clientMessage);
+                                            break;
+                                        }
+                                    default:
+                                        Console.WriteLine("Message: {{0}} unrecognized", message);
+                                        break;
+                                }
                                 StartReceive(clientSocket);
                             }
                         }
