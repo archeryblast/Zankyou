@@ -61,6 +61,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Configuration.Test.cs" />
+    <Compile Include="Configuration.cs" />
     <Compile Include="Monitor.cs" />
     <Compile Include="Server.cs" />
     <Compile Include="Server.Test.cs" />
