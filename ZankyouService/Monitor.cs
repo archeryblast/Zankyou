@@ -53,16 +53,14 @@ namespace ZankyouService
         /// <summary>
         /// Returns the total memory in megabytes
         /// </summary>
-        /// <returns></returns>
         private static int GetMemoryTotal()
         {
             return (int) (new Microsoft.VisualBasic.Devices.ComputerInfo().TotalPhysicalMemory / Math.Pow(1024, 2));
         }
 
         /// <summary>
-        /// Gets the total Ava
+        /// Gets the total Available memory in megabytes
         /// </summary>
-        /// <returns></returns>
         private static int GetMemoryAvailable()
         {
             var memCounter = new PerformanceCounter("Memory", "Available MBytes");
