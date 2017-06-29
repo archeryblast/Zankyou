@@ -8,6 +8,12 @@ using System.Threading.Tasks;
 
 namespace ZankyouService
 {
+    class ServerMessage
+    {
+        public string method;
+        public object data;
+    }
+
     public class Server
     {
         private TcpListener serverListener;
@@ -16,7 +22,7 @@ namespace ZankyouService
         /// Creates a sockets that listens on the specified port,
         /// configured in the user configuration.
         /// </summary>
-        public Server(string ipAddress = "127.0.0.1", int port = 12345)
+        public Server(string ipAddress = "192.168.0.7", int port = 12345)
         {
             var localHost = IPAddress.Parse(ipAddress);
             serverListener = new TcpListener(localHost, port);
@@ -72,22 +78,18 @@ namespace ZankyouService
                                 {
                                     case "GetSystemInfo":
                                         {
-                                            string result = Newtonsoft.Json.JsonConvert.SerializeObject(Monitor.GetSystemUsage());
-                                            byte[] clientMessage = Encoding.ASCII.GetBytes(result);
-                                            // notifies the client how large the data will be
-                                            clientSocket.Send(BitConverter.GetBytes(clientMessage.Length));
+                                            ServerMessage clientMessage = new ServerMessage() { method = "GetSystemInfo", data = Monitor.GetSystemUsage() };
+                                            string result = Newtonsoft.Json.JsonConvert.SerializeObject(clientMessage);
                                             // sends data to client
-                                            clientSocket.Send(clientMessage);
+                                            clientSocket.Send(Encoding.ASCII.GetBytes(result));
                                             break;
                                         }
                                     case "GetProcessInfo":
                                         {
-                                            string result = Newtonsoft.Json.JsonConvert.SerializeObject(Monitor.GetSystemProcesses());
-                                            byte[] clientMessage = Encoding.ASCII.GetBytes(result);
-                                            // notifies the client how large the data will be
-                                            clientSocket.Send(BitConverter.GetBytes(clientMessage.Length));
+                                            ServerMessage clientMessage = new ServerMessage() { method = "GetSystemInfo", data = Monitor.GetSystemProcesses() };
+                                            string result = Newtonsoft.Json.JsonConvert.SerializeObject(clientMessage);
                                             // sends data to client
-                                            clientSocket.Send(clientMessage);
+                                            clientSocket.Send(Encoding.ASCII.GetBytes(result));
                                             break;
                                         }
                                     default:
