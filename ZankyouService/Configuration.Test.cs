@@ -11,9 +11,9 @@ namespace ZankyouService
     public class ConfigurationTests
     {
         [Test]
-        public void getAvailbeHostNamesTest()
+        public void getAvailableHostNamesTest()
         {
-            List<IPAddress> list = Configuration.GetAvailbeIPAddresses();
+            List<IPAddress> list = Configuration.GetAvailableIPAddresses();
             foreach (var l in list)
             {
                 Console.WriteLine(l.ToString());

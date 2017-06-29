@@ -22,7 +22,7 @@ namespace ZankyouService
             }
         }
 
-        public static List<IPAddress> GetAvailbeIPAddresses()
+        public static List<IPAddress> GetAvailableIPAddresses()
         {
             var host = System.Net.Dns.GetHostEntry(System.Net.Dns.GetHostName());
             var result = host.AddressList.Where(ip => ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork).ToList();
